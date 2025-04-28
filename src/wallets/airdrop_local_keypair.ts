@@ -29,7 +29,7 @@ export async function loadDefaultKeypairWithAirdrop(cluster: Cluster): Promise<K
 			});
 
 			console.log("RESPONSE STATUS", result.status);
-			return result;
+			return result as unknown as globalThis.Response;
 		},
 	});
 
