@@ -30,12 +30,17 @@ await printBalances();
 
 const airdropSignature = await connection.requestAirdrop(aliceKeypair.publicKey, LAMPORTS_PER_SOL);
 
+const { blockhash, lastValidBlockHeight } = await connection.getLatestBlockhash();
+
+// wait tx confirm
+await connection.confirmTransaction({
+	blockhash,
+	lastValidBlockHeight,
+	signature: airdropSignature,
+});
+
 console.log("alice aridrop");
 await printBalances();
-
-await connection.confirmTransaction(airdropSignature);
-// TODD: fixme
-// await connection.confirmTransaction(strategy);
 
 const lamportsToSend = 1_000_000;
 

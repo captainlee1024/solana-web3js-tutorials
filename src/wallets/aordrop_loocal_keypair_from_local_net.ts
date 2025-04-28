@@ -1,20 +1,10 @@
-import { Cluster, clusterApiUrl, Connection, Keypair } from "@solana/web3.js";
+import { Connection, Keypair } from "@solana/web3.js";
 import { loadDefaultKeypairFromFile } from "./load_local_keypair.js";
-import { fetchWithProxy } from "./proxy_fetch.js";
 
-export async function loadDefaultKeypairWithAirdrop(cluster: Cluster): Promise<Keypair> {
+export async function loadDefaultKeypairWithAirdropFromLocalNet(url: string): Promise<Keypair> {
 	const keypair = await loadDefaultKeypairFromFile();
 
-	const rpcUrl = clusterApiUrl(cluster);
-	console.log(`rpcUrl: ${rpcUrl}`);
-	const connection = new Connection(rpcUrl, {
-		// commitment: "confirmed",
-		// fetch: fetch as any, // 使用 node-fetch
-		// httpAgent: httpsAgent, // 设置代理
-		commitment: "confirmed",
-
-		fetch: fetchWithProxy as any,
-	});
+	const connection = new Connection(url, "confirmed");
 
 	try {
 		var balance = await connection.getBalance(keypair.publicKey);
@@ -23,16 +13,15 @@ export async function loadDefaultKeypairWithAirdrop(cluster: Cluster): Promise<K
 		console.log(`Balance: ${balance} lamports`);
 
 		console.log("airdrop 1_000_000 lamports");
-
-		let airdropSignature = await connection.requestAirdrop(keypair.publicKey, 1_000_000);
+		let signature = await connection.requestAirdrop(keypair.publicKey, 1_000_000);
 
 		const { blockhash, lastValidBlockHeight } = await connection.getLatestBlockhash();
 
-		// wait tx confirm
+		// 等待交易被打包进最新块
 		await connection.confirmTransaction({
 			blockhash,
 			lastValidBlockHeight,
-			signature: airdropSignature,
+			signature,
 		});
 
 		balance = await connection.getBalance(keypair.publicKey);
@@ -44,5 +33,5 @@ export async function loadDefaultKeypairWithAirdrop(cluster: Cluster): Promise<K
 	return keypair;
 }
 
-const keypair = await loadDefaultKeypairWithAirdrop("devnet");
+const keypair = await loadDefaultKeypairWithAirdropFromLocalNet("http://127.0.0.1:8899");
 console.log(keypair.publicKey.toBase58());
