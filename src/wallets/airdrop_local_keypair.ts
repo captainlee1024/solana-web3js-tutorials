@@ -2,6 +2,7 @@ import { Cluster, clusterApiUrl, Connection, Keypair } from "@solana/web3.js";
 import { loadDefaultKeypairFromFile } from "./load_local_keypair.js";
 import { HttpsProxyAgent } from "https-proxy-agent";
 import fetch from "node-fetch";
+import { fetchWithProxy } from "./proxy_fetch.js";
 
 export async function loadDefaultKeypairWithAirdrop(cluster: Cluster): Promise<Keypair> {
 	const keypair = await loadDefaultKeypairFromFile();
@@ -19,18 +20,7 @@ export async function loadDefaultKeypairWithAirdrop(cluster: Cluster): Promise<K
 		// httpAgent: httpsAgent, // 设置代理
 		commitment: "confirmed",
 
-		fetch: async (input, options) => {
-			const processedInput =
-				typeof input === "string" && input.slice(0, 2) === "//" ? "https:" + input : input;
-
-			const result = await fetch(processedInput, {
-				...options,
-				agent: proxyAgent,
-			});
-
-			console.log("RESPONSE STATUS", result.status);
-			return result as unknown as globalThis.Response;
-		},
+		fetch: fetchWithProxy as any,
 	});
 
 	try {
