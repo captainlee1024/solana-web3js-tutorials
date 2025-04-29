@@ -35,7 +35,8 @@ async function offlineTx() {
 			lamports: 0.1 * LAMPORTS_PER_SOL,
 		}),
 	);
-	tx.recentBlockhash = (await connection.getRecentBlockhash()).blockhash;
+	// tx.recentBlockhash = (await connection.getRecentBlockhash()).blockhash;
+	tx.recentBlockhash = (await connection.getLatestBlockhash()).blockhash;
 	tx.feePayer = feePayer.publicKey;
 
 	let realDataNeedToSign = tx.serializeMessage();
