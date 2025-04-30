@@ -9,6 +9,8 @@ import {
 } from "@solana/web3.js";
 import { airdropAndConfirm, getLocalNetConnection } from "../transaction/utils.js";
 
+// TODO: 使用PDA签名和删除PDA账户
+
 (async () => {
 	// your program id
 	const programId = new PublicKey("64ej4U71nft84LuWfuaL3Br31iRf1s87tmtWC2r3weUh");
