@@ -51,3 +51,7 @@ test-ledger
 temp
 
 .cache
+
+# program
+program/target
+program/Cargo.lock
