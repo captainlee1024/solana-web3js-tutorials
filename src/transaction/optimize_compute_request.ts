@@ -11,6 +11,7 @@ import {
   TransactionMessage,
   VersionedTransaction,
 } from '@solana/web3.js';
+// @ts-ignore
 import { getSimulationComputeUnits } from '@solana-developers/helpers';
 import { airdropAndConfirm, getLocalNetConnection } from './utils.js';
 
