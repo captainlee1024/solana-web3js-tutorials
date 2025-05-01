@@ -1,18 +1,18 @@
-import { Keypair } from "@solana/web3.js";
-import * as bip39 from "bip39";
+import { Keypair } from '@solana/web3.js';
+import * as bip39 from 'bip39';
 
 export function genMnemonic(): string {
-	const mnemonic = bip39.generateMnemonic();
-	console.log("mnemonic: ", mnemonic);
-	return mnemonic;
+  const mnemonic = bip39.generateMnemonic();
+  console.log('mnemonic: ', mnemonic);
+  return mnemonic;
 }
 
 export function restoreKeypairFromMne(mne: string): Keypair {
-	const seed = bip39.mnemonicToSeedSync(mne, "");
-	const keypair = Keypair.fromSeed(seed.slice(0, 32));
+  const seed = bip39.mnemonicToSeedSync(mne, '');
+  const keypair = Keypair.fromSeed(seed.slice(0, 32));
 
-	console.log(`publickey: ${keypair.publicKey.toBase58()}`);
-	return keypair;
+  console.log(`publickey: ${keypair.publicKey.toBase58()}`);
+  return keypair;
 }
 
 const mne = genMnemonic();

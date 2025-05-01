@@ -1,0 +1,31 @@
+{
+  "$schema": "http://json.schemastore.org/prettierrc", // 启用编辑器智能提示
+  "printWidth": 100,                  // 每行最大字符数（主流项目常用80~120）
+  "tabWidth": 2,                      // 缩进空格数（与ESLint保持一致）
+  "useTabs": false,                   // 禁用Tab缩进（用空格保证跨编辑器一致）
+  "semi": true,                       // 语句末尾加分号（TypeScript推荐）
+  "singleQuote": true,                // 使用单引号（JSX属性除外）
+  "quoteProps": "consistent",         // 对象属性引号风格：保持统一
+  "jsxSingleQuote": false,            // JSX属性默认用双引号（React社区习惯）
+  "trailingComma": "es5",             // 在ES5语法有效处加尾随逗号（如对象、数组）
+  "bracketSpacing": true,             // 对象括号间加空格（如 { foo: bar }）
+  "bracketSameLine": false,           // JSX闭合标签换行（React/Vue推荐）
+  "arrowParens": "always",            // 箭头函数参数始终加括号（提高可读性）
+  "endOfLine": "lf",                  // 换行符用LF（Unix风格，跨平台兼容）
+  "proseWrap": "always",              // Markdown文本自动换行
+  "htmlWhitespaceSensitivity": "css", // HTML空格敏感性与CSS一致
+  "overrides": [                      // 针对不同文件类型的覆盖规则
+    {
+      "files": "*.md",
+      "options": {
+        "printWidth": 80              // Markdown文件行宽更严格
+      }
+    },
+    {
+      "files": "*.json",
+      "options": {
+        "printWidth": 200             // JSON文件允许超长行（避免无意义换行）
+      }
+    }
+  ]
+}

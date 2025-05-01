@@ -1,37 +1,37 @@
-import { Connection, Keypair } from "@solana/web3.js";
-import { loadDefaultKeypairFromFile } from "./load_local_keypair.js";
+import { Connection, Keypair } from '@solana/web3.js';
+import { loadDefaultKeypairFromFile } from './load_local_keypair.js';
 
 export async function loadDefaultKeypairWithAirdropFromLocalNet(url: string): Promise<Keypair> {
-	const keypair = await loadDefaultKeypairFromFile();
+  const keypair = await loadDefaultKeypairFromFile();
 
-	const connection = new Connection(url, "confirmed");
+  const connection = new Connection(url, 'confirmed');
 
-	try {
-		var balance = await connection.getBalance(keypair.publicKey);
+  try {
+    var balance = await connection.getBalance(keypair.publicKey);
 
-		// 1 LAMPORTS_PER_SOL = 1 SOL
-		console.log(`Balance: ${balance} lamports`);
+    // 1 LAMPORTS_PER_SOL = 1 SOL
+    console.log(`Balance: ${balance} lamports`);
 
-		console.log("airdrop 1_000_000 lamports");
-		let signature = await connection.requestAirdrop(keypair.publicKey, 1_000_000);
+    console.log('airdrop 1_000_000 lamports');
+    let signature = await connection.requestAirdrop(keypair.publicKey, 1_000_000);
 
-		const { blockhash, lastValidBlockHeight } = await connection.getLatestBlockhash();
+    const { blockhash, lastValidBlockHeight } = await connection.getLatestBlockhash();
 
-		// 等待交易被打包进最新块
-		await connection.confirmTransaction({
-			blockhash,
-			lastValidBlockHeight,
-			signature,
-		});
+    // 等待交易被打包进最新块
+    await connection.confirmTransaction({
+      blockhash,
+      lastValidBlockHeight,
+      signature,
+    });
 
-		balance = await connection.getBalance(keypair.publicKey);
-		console.log(`Balance: ${balance} lamports`);
-	} catch (err) {
-		console.error("Error fetching balance: ", err);
-	}
+    balance = await connection.getBalance(keypair.publicKey);
+    console.log(`Balance: ${balance} lamports`);
+  } catch (err) {
+    console.error('Error fetching balance: ', err);
+  }
 
-	return keypair;
+  return keypair;
 }
 
-const keypair = await loadDefaultKeypairWithAirdropFromLocalNet("http://127.0.0.1:8899");
+const keypair = await loadDefaultKeypairWithAirdropFromLocalNet('http://127.0.0.1:8899');
 console.log(keypair.publicKey.toBase58());

@@ -1,31 +1,31 @@
 import {
-	Connection,
-	Keypair,
-	LAMPORTS_PER_SOL,
-	sendAndConfirmTransaction,
-	SystemProgram,
-	Transaction,
-} from "@solana/web3.js";
+  Connection,
+  Keypair,
+  LAMPORTS_PER_SOL,
+  sendAndConfirmTransaction,
+  SystemProgram,
+  Transaction,
+} from '@solana/web3.js';
 
 const aliceKeypair = Keypair.generate();
 const bobKeypair = Keypair.generate();
 
-const connection = new Connection("http://127.0.0.1:8899", "confirmed");
+const connection = new Connection('http://127.0.0.1:8899', 'confirmed');
 
 const printBalances = async () => {
-	console.log(
-		"alice balance:",
-		(await connection.getBalance(aliceKeypair.publicKey)) / LAMPORTS_PER_SOL,
-		"SOL",
-	);
-	console.log(
-		"bob balance:",
-		(await connection.getBalance(bobKeypair.publicKey)) / LAMPORTS_PER_SOL,
-		"SOL",
-	);
+  console.log(
+    'alice balance:',
+    (await connection.getBalance(aliceKeypair.publicKey)) / LAMPORTS_PER_SOL,
+    'SOL'
+  );
+  console.log(
+    'bob balance:',
+    (await connection.getBalance(bobKeypair.publicKey)) / LAMPORTS_PER_SOL,
+    'SOL'
+  );
 };
 
-console.log("start");
+console.log('start');
 await printBalances();
 
 const airdropSignature = await connection.requestAirdrop(aliceKeypair.publicKey, LAMPORTS_PER_SOL);
@@ -34,25 +34,25 @@ const { blockhash, lastValidBlockHeight } = await connection.getLatestBlockhash(
 
 // wait tx confirm
 await connection.confirmTransaction({
-	blockhash,
-	lastValidBlockHeight,
-	signature: airdropSignature,
+  blockhash,
+  lastValidBlockHeight,
+  signature: airdropSignature,
 });
 
-console.log("alice aridrop");
+console.log('alice aridrop');
 await printBalances();
 
 const lamportsToSend = 1_000_000;
 
 const transferTransaction = new Transaction().add(
-	SystemProgram.transfer({
-		fromPubkey: aliceKeypair.publicKey,
-		toPubkey: bobKeypair.publicKey,
-		lamports: lamportsToSend,
-	}),
+  SystemProgram.transfer({
+    fromPubkey: aliceKeypair.publicKey,
+    toPubkey: bobKeypair.publicKey,
+    lamports: lamportsToSend,
+  })
 );
 
 await sendAndConfirmTransaction(connection, transferTransaction, [aliceKeypair]);
 
-console.log("alice transfer to bob");
+console.log('alice transfer to bob');
 await printBalances();
